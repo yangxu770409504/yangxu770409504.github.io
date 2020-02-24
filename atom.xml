@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://yangxu770409504.github.io</id>
     <title>Teemo&apos;s Blog</title>
-    <updated>2020-02-24T07:32:50.851Z</updated>
+    <updated>2020-02-24T07:33:59.048Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://yangxu770409504.github.io"/>
     <link rel="self" href="https://yangxu770409504.github.io/atom.xml"/>
@@ -23,6 +23,102 @@
 <li>序列号2</li>
 <li>序列号3</li>
 </ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[SpringBoot - JPA]]></title>
+        <id>https://yangxu770409504.github.io/post/test2-ce-shi-wen-zhang-2/</id>
+        <link href="https://yangxu770409504.github.io/post/test2-ce-shi-wen-zhang-2/">
+        </link>
+        <updated>2020-02-24T07:28:08.000Z</updated>
+        <content type="html"><![CDATA[<p>update：2020-02-19 22:39:23<br>
+关键字：JPA、MySQL、数据库、Hibernate</p>
+<p>0、POM文件：<br>
+<dependency><br>
+<groupId>org.springframework.boot</groupId><br>
+<artifactId>spring-boot-starter-data-jdbc</artifactId><br>
+</dependency><br>
+<dependency><br>
+<groupId>org.springframework.boot</groupId><br>
+<artifactId>spring-boot-starter-data-jpa</artifactId><br>
+</dependency><br>
+<dependency><br>
+<groupId>mysql</groupId><br>
+<artifactId>mysql-connector-java</artifactId><br>
+<scope>runtime</scope><br>
+</dependency></p>
+<p>1、配置yml文件：<br>
+server:<br>
+port: 8082</p>
+<p>spring:<br>
+datasource:<br>
+username: root<br>
+password: 12345678<br>
+url: jdbc:mysql://aly1.imyx.top:3307/SpringBootDB<br>
+driver-class-name: com.mysql.jdbc.Driver<br>
+jpa:<br>
+hibernate:<br>
+# 更新或者创建数据表结构<br>
+ddl-auto: update<br>
+# 控制台显示SQL<br>
+show-sql: true</p>
+<p>2、写Entity：<br>
+@Entity<br>
+public class Users {</p>
+<pre><code>@Id
+@GeneratedValue(strategy=GenerationType.AUTO)
+private Integer id;
+private String username;
+private String password;
+private Date lastLoginTime;
+private String userRole;
+
+// getter&amp;setter方法省略
+</code></pre>
+<p>}</p>
+<p>3、写Repository：<br>
+// 继承JpaRepository来完成对数据库的操作<br>
+public interface UsersRepository extends JpaRepository&lt;Users, Integer&gt; {</p>
+<pre><code>Users getUsersById(Integer id);
+
+List&lt;Users&gt; findAllByUserRole(String userRole);
+</code></pre>
+<p>}</p>
+<p>4、写Controller：<br>
+@Controller<br>
+public class LoginController {</p>
+<pre><code>@Autowired
+UsersRepository usersRepository;
+
+@ResponseBody
+@GetMapping(&quot;/getTotal&quot;)
+public long getTotal(){
+    return usersRepository.count();
+}
+
+@ResponseBody
+@GetMapping(&quot;/getAll&quot;)
+public List&lt;Users&gt; getAll() {
+    return usersRepository.findAll();
+}
+
+@ResponseBody
+@GetMapping(&quot;/getUsersById/{id}&quot;)
+public Users getUsersById(@PathVariable(&quot;id&quot;) Integer id) {
+    System.out.println(id);
+    Users users = usersRepository.getUsersById(id);
+    return users;
+}
+
+@ResponseBody
+@GetMapping(&quot;/findAllByUserRole/{userRole}&quot;)
+public List&lt;Users&gt; findAllByUserRole(@PathVariable(&quot;userRole&quot;) String userRole) {
+    System.out.println(userRole);
+    List&lt;Users&gt; users = usersRepository.findAllByUserRole(userRole);
+    return users;
+}
+</code></pre>
+<p>}</p>
 ]]></content>
     </entry>
     <entry>
